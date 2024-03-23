@@ -42,7 +42,7 @@ What is Kickstart?
     - (or HTML version): https://neovim.io/doc/user/lua-guide.html
 
 Kickstart Guide:
-
+ini
   TODO: The very first thing you should do is to run the command `:Tutor` in Neovim.
 
     If you don't know what this means, type the following:
@@ -275,7 +275,10 @@ require('lazy').setup({
     cmd = 'Copilot',
     event = 'InsertEnter',
     config = function()
-      require('copilot').setup {}
+      require('copilot').setup {
+        suggestion = { enabled = false },
+        panel = { enabled = false },
+      }
     end,
   },
 
@@ -596,7 +599,7 @@ require('lazy').setup({
         },
       }
 
-      -- Ensure the servers and tools above are installed
+      -- nsure the servers and tools above are installed
       --  To check the current status of installed tools and/or manually install
       --  other tools, you can run
       --    :Mason
@@ -610,6 +613,20 @@ require('lazy').setup({
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
       })
+
+      local eliminarElemento = function(tabla, elemento)
+        for i = #tabla, 1, -1 do
+          if tabla[i] == elemento then
+            table.remove(tabla, i)
+            -- Rompe el bucle una vez que se encuentra y se elimina el elemento
+            break
+          end
+        end
+      end
+
+      eliminarElemento(ensure_installed, 'clangd')
+      -- vim.(ensure_installed, 'clangd')
+
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
       require('mason-lspconfig').setup {
@@ -621,6 +638,11 @@ require('lazy').setup({
             -- certain features of an LSP (for example, turning off formatting for tsserver)
             server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
             require('lspconfig')[server_name].setup(server)
+
+            -- just a hacky way to install clangd manually
+            if server_name == 'lua_ls' then
+              require('lspconfig').clangd.setup {}
+            end
           end,
         },
       }
@@ -750,10 +772,10 @@ require('lazy').setup({
           --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
         },
         sources = {
-          { name = 'copilot' },
-          { name = 'nvim_lsp' },
-          { name = 'luasnip' },
-          { name = 'path' },
+          { name = 'copilot', group_index = 2 },
+          { name = 'nvim_lsp', group_index = 2 },
+          { name = 'luasnip', group_index = 2 },
+          { name = 'path', group_index = 2 },
         },
       }
     end,
