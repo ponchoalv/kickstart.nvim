@@ -209,9 +209,9 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 })
 
 -- Flattern fold when file is open
-vim.api.nvim_create_autocmd({ 'BufReadPost', 'FileReadPost' }, {
+vim.api.nvim_create_autocmd({ 'BufEnter', 'BufReadPost', 'FileReadPost' }, {
   desc = 'Flattern buffer when open file',
-  group = vim.api.nvim_create_augroup('fold-expr-flattern', {}),
+  group = vim.api.nvim_create_augroup('vimrc', { clear = true }),
   pattern = '*',
   command = 'normal zR',
 })
