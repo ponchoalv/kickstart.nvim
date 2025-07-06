@@ -569,6 +569,8 @@ require('lazy').setup({
         --
         terraformls = {},
 
+        ols = {},
+
         helm_ls = {
           filetypes = { 'yaml', 'helm' },
         },
